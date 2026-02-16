@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Validation Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #4e73df, #1cc88a);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            padding: 25px;
+            width: 400px;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 4px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            transition: 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #4e73df;
+            box-shadow: 0 0 5px #4e73df;
+            outline: none;
+        }
+
+        .gender-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #4e73df;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #2e59d9;
+        }
+
+        .error {
+            color: red;
+            font-size: 12px;
+        }
+
+        .success {
+            text-align: center;
+            color: green;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .toggle-password {
+            cursor: pointer;
+            font-size: 12px;
+            color: blue;
+            margin-top: 3px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Student Registration</h2>
+    <form id="studentForm">
+
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text" id="name">
+            <div class="error" id="nameError"></div>
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+            <input type="text" id="email">
+            <div class="error" id="emailError"></div>
+        </div>
+
+        <div class="form-group">
+            <label>Date of Birth</label>
+            <input type="date" id="dob">
+            <div class="error" id="dobError"></div>
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="password">
+            <div class="toggle-password" onclick="togglePassword()">Show/Hide Password</div>
+            <div class="error" id="passwordError"></div>
+        </div>
+
+        <div class="form-group">
+            <label>Academic Details</label>
+            <select id="academic">
+                <option value="">Select Course</option>
+                <option>BCA</option>
+                <option>BSc</option>
+                <option>BTech</option>
+                <option>MCA</option>
+                <option>MSc</option>
+            </select>
+            <div class="error" id="academicError"></div>
+        </div>
+
+        <div class="form-group">
+            <label>Gender</label>
+            <div class="gender-group">
+                <label><input type="radio" name="gender" value="Male"> Male</label>
+                <label><input type="radio" name="gender" value="Female"> Female</label>
+                <label><input type="radio" name="gender" value="Other"> Other</label>
+            </div>
+            <div class="error" id="genderError"></div>
+        </div>
+
+        <div class="form-group">
+            <label>Phone Number</label>
+            <input type="text" id="phone">
+            <div class="error" id="phoneError"></div>
+        </div>
+
+        <div class="form-group">
+            <label>Address</label>
+            <textarea id="address"></textarea>
+            <div class="error" id="addressError"></div>
+        </div>
+
+        <button type="submit">Register</button>
+        <div class="success" id="successMessage"></div>
+
+    </form>
+</div>
+
+<script>
+document.getElementById("studentForm").addEventListener("submit", function(event){
+    event.preventDefault();
+
+    let valid = true;
+
+    let name = document.getElementById("name").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let dob = document.getElementById("dob").value;
+    let password = document.getElementById("password").value.trim();
+    let academic = document.getElementById("academic").value;
+    let phone = document.getElementById("phone").value.trim();
+    let address = document.getElementById("address").value.trim();
+    let gender = document.querySelector('input[name="gender"]:checked');
+
+    // Clear errors
+    document.querySelectorAll(".error").forEach(e => e.innerText = "");
+    document.getElementById("successMessage").innerText = "";
+
+    if(name === "") {
+        document.getElementById("nameError").innerText = "Name is required";
+        valid = false;
+    }
+
+    let emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+    if(!email.match(emailPattern)) {
+        document.getElementById("emailError").innerText = "Enter valid email";
+        valid = false;
+    }
+
+    if(dob === "") {
+        document.getElementById("dobError").innerText = "Select date of birth";
+        valid = false;
+    }
+
+    if(password.length < 6) {
+        document.getElementById("passwordError").innerText = "Password must be 6+ characters";
+        valid = false;
+    }
+
+    if(academic === "") {
+        document.getElementById("academicError").innerText = "Select course";
+        valid = false;
+    }
+
+    if(!gender) {
+        document.getElementById("genderError").innerText = "Select gender";
+        valid = false;
+    }
+
+    if(phone.length !== 10 || isNaN(phone)) {
+        document.getElementById("phoneError").innerText = "Enter valid 10-digit number";
+        valid = false;
+    }
+
+    if(address === "") {
+        document.getElementById("addressError").innerText = "Address required";
+        valid = false;
+    }
+
+    if(valid) {
+        document.getElementById("successMessage").innerText = "Registration Successful!";
+    }
+});
+
+function togglePassword(){
+    let pass = document.getElementById("password");
+    pass.type = pass.type === "password" ? "text" : "password";
+}
+</script>
+
+</body>
+</html>
